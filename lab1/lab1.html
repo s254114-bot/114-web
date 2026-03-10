@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>114 Web Labs - 魂葬抽籤</title>
+    <style>
+        /* --- 死神美學 CSS --- */
+        :root {
+            --black: #050505;
+            --white: #ffffff;
+            --reiatsu-red: #ff003c;
+            --getsuga-blue: #00e5ff;
+            --blade-gray: #333333;
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--white);
+            font-family: 'Noto Serif TC', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+        }
+
+        .container {
+            width: 400px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 1);
+        }
+
+        /* 標題：帶有斬擊感的文字 */
+        h2 {
+            font-size: 2rem;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px var(--reiatsu-red);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--reiatsu-red);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        /* 名單輸入區 */
+        textarea {
+            width: 100%;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--blade-gray);
+            color: var(--white);
+            padding: 10px;
+            font-size: 16px;
+            resize: none;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        textarea:focus {
+            border-color: var(--getsuga-blue);
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+        }
+
+        /* 抽籤按鈕：斬魄刀風格 */
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 15px;
+            background: transparent;
+            color: var(--white);
+            border: 1px solid var(--white);
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.4s;
+            letter-spacing: 3px;
+        }
+
+        button:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: skewX(-10deg);
+        }
+
+        /* 結果顯示區 */
+        #result-box {
+            margin-top: 30px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed var(--blade-gray);
+            position: relative;
+        }
+
+        #result {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--white);
+            transition: 0.2s;
+        }
+
+        /* 抽籤時的「靈壓爆發」動畫 */
+        .reiatsu-active {
+            animation: flicker 0.1s infinite;
+            color: var(--reiatsu-red) !important;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.5; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .final-winner {
+            text-shadow: 0 0 20px var(--reiatsu-red), 0 0 40px var(--reiatsu-red);
+            color: var(--white) !important;
+            animation: winner-glow 1s ease-out;
+        }
+
+        @keyframes winner-glow {
+            from { transform: scale(1.5); filter: brightness(2); }
+            to { transform: scale(1); filter: brightness(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>魂葬選擇</h2>
+        <p style="font-size: 0.8rem; color: #666; margin-bottom: 15px;">注入靈壓以選定目標...</p>
+        
+        <textarea id="nameList" placeholder="輸入名單...&#10;每行一個名字"></textarea>
+        
+        <button onclick="performSoulBurial()">始解・抽籤</button>
+
+        <div id="result-box">
+            <div id="result">待機中</div>
+        </div>
+    </div>
+
+    <script>
+        let isSpinning = false;
+
+        function performSoulBurial() {
+            if (isSpinning) return;
+
+            const textarea = document.getElementById('nameList');
+            const resultDisplay = document.getElementById('result');
+            
+            // 取得名單並過濾空白
+            const names = textarea.value.split('\n').map(n => n.trim()).filter(n => n !== "");
+
+            if (names.length < 2) {
+                alert("靈壓不足（請至少輸入兩個名字）");
+                return;
+            }
+
+            isSpinning = true;
+            resultDisplay.classList.add('reiatsu-active');
+            resultDisplay.classList.remove('final-winner');
+
+            let counter = 0;
+            const spinTime = 20; // 閃動次數
+            
+            // 隨機閃動效果
+            const timer = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * names.length);
+                resultDisplay.innerText = names[randomIndex];
+                counter++;
+
+                if (counter > spinTime) {
+                    clearInterval(timer);
+                    
+                    // 最終決定
+                    const winner = names[Math.floor(Math.random() * names.length)];
+                    resultDisplay.innerText = winner;
+                    
+                    // 加入終結動畫
+                    resultDisplay.classList.remove('reiatsu-active');
+                    resultDisplay.classList.add('final-winner');
+                    isSpinning = false;
+                }
+            }, 80); // 閃動速度
+        }
+    </script>
+
+</body>
+</html>
