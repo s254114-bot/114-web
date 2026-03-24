@@ -1,0 +1,211 @@
+/* 死神風格：黑、白、赤 */
+:root {
+    --color-bg: #000000;
+    --color-text: #ffffff;
+    --color-accent: #e74c3c; /* 靈壓與虛化的紅色 */
+    --color-sub: #bdc3c7;
+    --font-jp: 'Noto Serif JP', serif; /* 書法感字體 */
+    --font-shinigami: 'Kosugi Maru', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-shinigami);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
+}
+
+/* 靈壓背景動畫 */
+.reiatsu-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 1px, transparent 1px),
+        radial-gradient(circle at 80% 70%, rgba(231, 76, 60, 0.05) 2px, transparent 2px);
+    background-size: 50px 50px;
+    animation: reiatsuFlow 10s linear infinite;
+    z-index: -1;
+}
+
+@keyframes reiatsuFlow {
+    from { background-position: 0 0; }
+    to { background-position: 100px 100px; }
+}
+
+/* 主容器 */
+.main-wrapper {
+    max-width: 950px;
+    width: 100%;
+    display: flex;
+    border: 2px solid var(--color-text); /* 類似死神漫畫黑白框 */
+    box-shadow: 0 0 20px rgba(231, 76, 60, 0.2); /* 微弱的紅光 */
+    position: relative;
+    overflow: hidden;
+}
+
+/* 左側：死神名片 */
+.shinigami-profile {
+    background: var(--color-text);
+    color: var(--color-bg);
+    padding: 50px 30px;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 2px solid var(--color-text);
+}
+
+.zanpakuto-icon {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 5px solid var(--color-bg);
+    object-fit: cover;
+    filter: grayscale(100%) contrast(120%); /* 灰階黑白效果 */
+}
+
+.zanpakuto-icon::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 4px;
+    background-color: var(--color-accent); /* 下方的紅色強調 */
+}
+
+.shinigami-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    font-family: var(--font-jp); /* 使用日文書法感字體 */
+}
+
+.division-tag {
+    font-size: 0.85rem;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+}
+
+.zanpakuto-info {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding-top: 10px;
+}
+
+.label { color: #555; }
+.value { font-weight: 700; color: var(--color-accent); }
+
+.soul-status {
+    margin-top: auto;
+    font-size: 0.8rem;
+    color: #7f8c8d;
+}
+
+.status-icon.active {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #2ecc71;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+/* 右側内容 */
+.story-content {
+    padding: 50px;
+    width: 65%;
+}
+
+section {
+    margin-bottom: 35px;
+}
+
+h2 {
+    font-family: var(--font-jp);
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+.bio-section p {
+    margin-bottom: 10px;
+    line-height: 1.8;
+}
+
+/* 技能標籤 */
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.skill-tags span {
+    border: 1px solid var(--color-text);
+    padding: 6px 15px;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.skill-tags span:hover {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+    cursor: crosshair;
+}
+
+/* 任務 */
+.mission-item strong {
+    color: var(--color-accent);
+    display: block;
+    margin-bottom: 5px;
+    font-size: 1rem;
+}
+
+.mission-item p {
+    color: var(--color-sub);
+    font-size: 0.9rem;
+}
+
+/* 響應式：手機版 */
+@media (max-width: 768px) {
+    .main-wrapper {
+        flex-direction: column;
+    }
+    .shinigami-profile, .story-content {
+        width: 100%;
+        border: none;
+    }
+    .shinigami-profile {
+        padding: 40px;
+        border-bottom: 2px solid var(--color-text);
+    }
+    .story-content {
+        padding: 30px;
+    }
+}
