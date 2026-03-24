@@ -1,7 +1,7 @@
 /* 整體頁面設定 */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f7fa;
+    background-color: hsl(0, 0%, 27%);
     margin: 0;
     padding: 20px;
     text-align: center;
@@ -37,7 +37,7 @@ a {
     display: inline-block;
     margin-top: 15px;
     padding: 10px 20px;
-    background-color: #3498db;
+    background-color: #ff3d3d;
     color: white;
     text-decoration: none;
     border-radius: 5px;
